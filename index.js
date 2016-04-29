@@ -32,7 +32,7 @@ var OPTIONS_SCHEMA = {
   properties: {
     interval: {
       type: 'number',
-      default: 500,
+      default: 200,
       required: true
     }
   }
@@ -51,10 +51,10 @@ Plugin.prototype.events = function(){
   var self = this;
   active = true;
 
-  var throttledEmit = _.debounce(function(payload){
+  var throttledEmit = _.throttle(function(payload){
    debug('throttled', payload);
    self.emit('message', {"devices": ['*'], "payload": payload});
-  }, self.options.interval, {'leading': false});
+ }, self.options.interval, {'leading': true});
 
   parser.on('noteOn', function(note, velocity, channel){
     debug('noteOn:', note, velocity, channel);
